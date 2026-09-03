@@ -293,4 +293,12 @@
     flex-wrap: wrap;
     display: flex;
   }
+
+  .main .run, .main .run ul {
+    gap: 4vw
+  }
+
+  .main .run li {
+    font-size: 3vw;
+  }
 }
