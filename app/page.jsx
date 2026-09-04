@@ -1,13 +1,16 @@
 "use client";
 
 import Image from "next/image";
-import s from "./main.module.css";
+import main from "./hero-page-style/hero-main.module.css";
+import about from "./hero-page-style/hero-about.module.css";
 import { Button } from "@/components/ui/button";
 import randomColor from "@/components/rndm-collor";
 import InstagramIcon from "@/public/instagram.svg";
 import TelegramIcon from "@/public/telegram.svg";
 import GitHubIcon from "@/public/github.svg";
 import TiktokIcon from "@/public/tiktok.svg";
+import { Asterisk } from "lucide-react";
+import ParticleText from "@/components/particleText";
 
 export default function Home() {
   const skills = [
@@ -18,6 +21,7 @@ export default function Home() {
     "Next.js",
     "ReduxToolkit",
     "Express",
+    "SEO",
     "API",
     "Sass",
     "Tailwind",
@@ -28,12 +32,12 @@ export default function Home() {
   const skillColors = skills.map(() => randomColor());
 
   return (
-    <div className={s.wrapper}>
-      <main className={s.main}>
-        <div className={s.contacts}>
-          <ul className={s.contactsList}>
+    <div className={main.wrapper}>
+      <main className={main.main}>
+        <div className={main.contacts}>
+          <ul className={main.contactsList}>
             <li
-              className={s.contactItem}
+              className={main.contactItem}
               onMouseEnter={(e) => (e.target.style.color = randomColor())}
               onMouseLeave={(e) => (e.target.style.color = "currentColor")}
             >
@@ -42,7 +46,7 @@ export default function Home() {
               </a>
             </li>
             <li
-              className={s.contactItem}
+              className={main.contactItem}
               onMouseEnter={(e) => (e.target.style.color = randomColor())}
               onMouseLeave={(e) => (e.target.style.color = "currentColor")}
             >
@@ -52,38 +56,37 @@ export default function Home() {
             </li>
           </ul>
 
-          <div className={s.arrow}></div>
+          <div className={main.arrow}></div>
         </div>
-        <div className={s.content}>
-
-          <div className={s.info}>
-            <h1 className={s.title}>
+        <div className={main.content}>
+          <div className={main.info}>
+            <h1 className={main.title}>
               <p>Andrii </p>
               Hrechukh
-              <span className={s.subtitle}>
+              <span className={main.subtitle}>
                 {" "}
                 Front-end <br />
                 developer
               </span>
             </h1>
-            <div className={`${s.imgBoxMobile} ${s.imgBox}`}>
+            <div className={`${main.imgBoxMobile} ${main.imgBox}`}>
               <Image
-                className={s.image}
+                className={main.image}
                 src="/andrii.png"
                 alt="Andrii Hrechukh"
                 width={689}
                 height={624}
               />
             </div>
-            <div className={s.buttons}>
-              <Button className={s.button}>Зв'язатися</Button>
-              <Button className={s.button}>Проекти</Button>
+            <div className={main.buttons}>
+              <Button className={main.button}>Зв'язатися</Button>
+              <Button className={main.button}>Проекти</Button>
             </div>
           </div>
 
-          <div className={s.imgBox}>
+          <div className={main.imgBox}>
             <Image
-              className={s.image}
+              className={main.image}
               src="/andrii.png"
               alt="Andrii Hrechukh"
               width={689}
@@ -91,82 +94,55 @@ export default function Home() {
             />
           </div>
 
-          <div className={s.contactsMobile}>
-            <ul className={s.contactsList}>
+          <div className={main.contactsMobile}>
+            <ul className={main.contactsList}>
               <li
-              className={s.contactItem}
-              onMouseEnter={(e) => (e.target.style.color = randomColor())}
-              onMouseLeave={(e) => (e.target.style.color = "currentColor")}
-            >
-              <a href="https://www.instagram.com/andrew_20o4/">
-                <InstagramIcon />
-                Instagram
-              </a>
-            </li>
-            <li
-              className={s.contactItem}
-              onMouseEnter={(e) => (e.target.style.color = randomColor())}
-              onMouseLeave={(e) => (e.target.style.color = "currentColor")}
-            >
-              <a href="mailto:andrii.hrechukh@gmail.com">
-                <TelegramIcon />
-                Telegram
-              </a>
-            </li>
-            <li
-              className={s.contactItem}
-              onMouseEnter={(e) => (e.target.style.color = randomColor())}
-              onMouseLeave={(e) => (e.target.style.color = "currentColor")}
-            >
-              <a href="mailto:andrii.hrechukh@gmail.com">
-                <GitHubIcon />
-                GitHub
-              </a>
-            </li>
-            <li
-              className={s.contactItem}
-              onMouseEnter={(e) => (e.target.style.color = randomColor())}
-              onMouseLeave={(e) => (e.target.style.color = "currentColor")}
-            >
-              <a href="mailto:andrii.hrechukh@gmail.com">
-                <TiktokIcon />
-                Tiktok
-              </a>
-            </li>
-          </ul>
-          </div>
-
-          <div className={s.runBox}>
-            <div className={s.run}>
-              <ul className={s.skills}>
-                {skills.map((skill, index) => (
-                  <li
-                    key={index}
-                    className={s.skill}
-                    style={{ color: skillColors[index] }}
-                  >
-                    {skill}
-                  </li>
-                ))}
-              </ul>
-              <ul className={s.skills}>
-                {skills.map((skill, index) => (
-                  <li
-                    key={`${skill}-${index}-copy`}
-                    className={s.skill}
-                    style={{ color: skillColors[index] }}
-                  >
-                    <strong>{skill}</strong>
-                  </li>
-                ))}
-              </ul>
-            </div>
+                className={main.contactItem}
+                onMouseEnter={(e) => (e.target.style.color = randomColor())}
+                onMouseLeave={(e) => (e.target.style.color = "currentColor")}
+              >
+                <a href="https://www.instagram.com/andrew_20o4/">
+                  <InstagramIcon />
+                  Instagram
+                </a>
+              </li>
+              <li
+                className={main.contactItem}
+                onMouseEnter={(e) => (e.target.style.color = randomColor())}
+                onMouseLeave={(e) => (e.target.style.color = "currentColor")}
+              >
+                <a href="mailto:andrii.hrechukh@gmail.com">
+                  <TelegramIcon />
+                  Telegram
+                </a>
+              </li>
+              <li
+                className={main.contactItem}
+                onMouseEnter={(e) => (e.target.style.color = randomColor())}
+                onMouseLeave={(e) => (e.target.style.color = "currentColor")}
+              >
+                <a href="mailto:andrii.hrechukh@gmail.com">
+                  <GitHubIcon />
+                  GitHub
+                </a>
+              </li>
+              <li
+                className={main.contactItem}
+                onMouseEnter={(e) => (e.target.style.color = randomColor())}
+                onMouseLeave={(e) => (e.target.style.color = "currentColor")}
+              >
+                <a href="mailto:andrii.hrechukh@gmail.com">
+                  <TiktokIcon />
+                  Tiktok
+                </a>
+              </li>
+            </ul>
           </div>
         </div>
-        <div className={s.contacts}>
-          <ul className={s.contactsList}>
+        <div className={main.contacts}>
+          <ul className={main.contactsList}>
             <li
-              className={s.contactItem}
+              className={main.contactItem}
               onMouseEnter={(e) => (e.target.style.color = randomColor())}
               onMouseLeave={(e) => (e.target.style.color = "currentColor")}
             >
@@ -175,7 +151,7 @@ export default function Home() {
               </a>
             </li>
             <li
-              className={s.contactItem}
+              className={main.contactItem}
               onMouseEnter={(e) => (e.target.style.color = randomColor())}
               onMouseLeave={(e) => (e.target.style.color = "currentColor")}
             >
@@ -184,9 +160,63 @@ export default function Home() {
               </a>
             </li>
           </ul>
-          <div className={s.arrow}></div>
+          <div className={main.arrow}></div>
+        </div>
+        <div className={main.runBox}>
+          <div className={main.run}>
+            <ul className={main.skills}>
+              {skills.map((skill, index) => (
+                <li
+                  key={index}
+                  className={main.skill}
+                  style={{ color: skillColors[index] }}
+                >
+                  {skill}
+                </li>
+              ))}
+            </ul>
+            <ul className={main.skills}>
+              {skills.map((skill, index) => (
+                <li
+                  key={`${skill}-${index}-copy`}
+                  className={main.skill}
+                  style={{ color: skillColors[index] }}
+                >
+                  <strong>{skill}</strong>
+                </li>
+              ))}
+            </ul>
+          </div>
         </div>
       </main>
+
+      <section className={about.about}>
+        <div className={about.titleBox}>
+          <Asterisk className={about.titleIcon} size=".8em" />
+          <h2 className="hidden">01 ABOUT ME</h2>
+            <ParticleText
+              text="01"
+              fontSize="clamp(48px, 12vw, 160px)"
+              fontWeight={200}
+              color="currentColor"
+              interactionRadius={200}
+              interactionStrength={0.2}
+              particleSize="5%"
+              particleGap="5%"
+            />
+            <ParticleText
+              text="ABOUT ME"
+              fontSize="clamp(48px, 12vw, 160px)"
+              fontWeight={700}
+              color="currentColor"
+              interactionRadius={200}
+              interactionStrength={0.2}
+              particleSize="5%"
+              particleGap="5%"
+            />
+          <Asterisk className={about.titleIcon} size=".8em" />
+        </div>
+      </section>
     </div>
   );
 }

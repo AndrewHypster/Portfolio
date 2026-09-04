@@ -1,0 +1,49 @@
+.about {
+  margin-top: 10vh;
+}
+
+.titleBox {
+  position: relative;
+  font-size: clamp(48px, 12vw, 160px);
+  color: var(--foreground);
+  gap: 0.35em;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.numberParticle,
+.textParticle {
+  height: 1em;
+  flex: 0 0 auto;
+}
+
+.numberParticle {
+  width: 1.5em;
+}
+
+.textParticle {
+  width: 7.2em;
+}
+
+.title {
+  display: none;
+}
+
+.title span {
+  font-weight: 100;
+  font-style: italic;
+}
+
+.titleIcon {
+  animation: rotate 5s linear infinite;
+}
+
+@keyframes rotate {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
