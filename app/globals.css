@@ -6,20 +6,7 @@
    - public/fonts/Geist-Regular.woff2
    - public/fonts/Geist-Bold.woff2
    If you have different file names, update the src URLs below. */
-@font-face {
-  font-family: "Geist";
-  src: url("/fonts/Geist-Regular.woff2") format("woff2");
-  font-weight: 400;
-  font-style: normal;
-  font-display: swap;
-}
-@font-face {
-  font-family: "Geist";
-  src: url("/fonts/Geist-Bold.woff2") format("woff2");
-  font-weight: 700;
-  font-style: normal;
-  font-display: swap;
-}
+
 
 @custom-variant dark (&:is(.dark *));
 

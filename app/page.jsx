@@ -11,6 +11,7 @@ import GitHubIcon from "@/public/github.svg";
 import TiktokIcon from "@/public/tiktok.svg";
 import { Asterisk } from "lucide-react";
 import ParticleText from "@/components/particleText";
+import { useEffect, useRef, useState } from "react";
 
 export default function Home() {
   const skills = [
@@ -29,7 +30,28 @@ export default function Home() {
     "Figma",
   ];
 
-  const skillColors = skills.map(() => randomColor());
+  const listRef = useRef(null);
+  const runRef = useRef(null);
+  const [skillColors, setSkillColors] = useState(skills.map(() => 'transparent'));
+
+  useEffect(() => {
+    const updateWidth = () => {
+      if (!listRef.current || !runRef.current) return;
+
+      const width = listRef.current.getBoundingClientRect().width;
+      runRef.current.style.setProperty("--list-width", `${width}px`);
+    };
+
+    updateWidth();
+
+    window.addEventListener("resize", updateWidth);
+
+    setSkillColors(skills.map(() => randomColor()));
+
+    return () => {
+      window.removeEventListener("resize", updateWidth);
+    };
+  }, []);
 
   return (
     <div className={main.wrapper}>
@@ -76,6 +98,7 @@ export default function Home() {
                 alt="Andrii Hrechukh"
                 width={689}
                 height={624}
+                loading="eager"
               />
             </div>
             <div className={main.buttons}>
@@ -91,6 +114,7 @@ export default function Home() {
               alt="Andrii Hrechukh"
               width={689}
               height={624}
+              loading="eager"
             />
           </div>
 
@@ -162,23 +186,19 @@ export default function Home() {
           </ul>
           <div className={main.arrow}></div>
         </div>
-        <div className={main.runBox}>
-          <div className={main.run}>
-            <ul className={main.skills}>
+      </main>
+
+      <div className={main.runBox}>
+        <div ref={runRef} className={main.run}>
+          {[0, 1, 2].map((copy) => (
+            <ul
+              key={copy}
+              ref={copy === 0 ? listRef : null}
+              className={main.skills}
+            >
               {skills.map((skill, index) => (
                 <li
-                  key={index}
-                  className={main.skill}
-                  style={{ color: skillColors[index] }}
-                >
-                  {skill}
-                </li>
-              ))}
-            </ul>
-            <ul className={main.skills}>
-              {skills.map((skill, index) => (
-                <li
-                  key={`${skill}-${index}-copy`}
+                  key={`${copy}-${index}`}
                   className={main.skill}
                   style={{ color: skillColors[index] }}
                 >
@@ -186,26 +206,26 @@ export default function Home() {
                 </li>
               ))}
             </ul>
-          </div>
+          ))}
         </div>
-      </main>
+      </div>
 
       <section className={about.about}>
         <div className={about.titleBox}>
           <Asterisk className={about.titleIcon} size=".8em" />
           <h2 className="hidden">01 ABOUT ME</h2>
 
-            <ParticleText
-              text="ABOUT ME"
-              fontSize="100%"
-              fontWeight={700}
-              color="#ffffff"
-              interactionRadius={100}
-              interactionStrength={2}
-              particleSize="5%"
-              particleGap="5%"
-            />
-          
+          <ParticleText
+            text="ABOUT ME"
+            fontSize="100%"
+            fontWeight={700}
+            color="currentColor"
+            interactionRadius={100}
+            interactionStrength={2}
+            particleSize="5%"
+            particleGap="5%"
+          />
+
           <Asterisk className={about.titleIcon} size=".8em" />
         </div>
       </section>
