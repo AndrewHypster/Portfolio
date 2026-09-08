@@ -194,26 +194,18 @@ export default function Home() {
         <div className={about.titleBox}>
           <Asterisk className={about.titleIcon} size=".8em" />
           <h2 className="hidden">01 ABOUT ME</h2>
-          <ParticleText
-            text="01"
-            fontSize="var(--about-title-font-size)"
-            fontWeight={200}
-            color="#ffffff"
-            interactionRadius={200}
-            interactionStrength={0.2}
-            particleSize="5%"
-            particleGap="5%"
-          />
-          <ParticleText
-            text="ABOUT ME"
-            fontSize="var(--about-title-font-size)"
-            fontWeight={700}
-            color="#ffffff"
-            interactionRadius={200}
-            interactionStrength={0.2}
-            particleSize="5%"
-            particleGap="5%"
-          />
+
+            <ParticleText
+              text="ABOUT ME"
+              fontSize="100%"
+              fontWeight={700}
+              color="#ffffff"
+              interactionRadius={100}
+              interactionStrength={2}
+              particleSize="5%"
+              particleGap="5%"
+            />
+          
           <Asterisk className={about.titleIcon} size=".8em" />
         </div>
       </section>

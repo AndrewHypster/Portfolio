@@ -15,13 +15,15 @@ function resolveCssPixels(value, container, reference, fallback) {
   }
 
   const probe = document.createElement("span");
+
   probe.style.position = "absolute";
   probe.style.visibility = "hidden";
   probe.style.fontSize = value;
-  probe.style.width = `${reference}px`;
+
   container.appendChild(probe);
 
   const pixels = parseFloat(getComputedStyle(probe).fontSize);
+
   probe.remove();
 
   return Number.isFinite(pixels) ? pixels : fallback;
@@ -33,12 +35,15 @@ function resolveCssColor(value, container, fallback) {
   }
 
   const probe = document.createElement("span");
+
   probe.style.position = "absolute";
   probe.style.visibility = "hidden";
   probe.style.color = value;
+
   container.appendChild(probe);
 
   const resolvedColor = getComputedStyle(probe).color;
+
   probe.remove();
 
   return resolvedColor || fallback;
@@ -46,13 +51,25 @@ function resolveCssColor(value, container, fallback) {
 
 export default function ParticleText({
   text,
+
+  // Можна:
+  // 100
+  // "50%"
+  // "10vw"
+  // "10vh"
+  // "5rem"
   fontSize = 100,
+
   fontWeight = 700,
+
   color = "#ffffff",
+
   interactionRadius = 100,
-  interactionStrength = 3,
-  particleSize = 2,
-  particleGap = 5,
+  interactionStrength = 5,
+
+  particleSize = 4,
+  particleGap = 8,
+
   className = "",
   inline = false,
 }) {
@@ -81,51 +98,65 @@ export default function ParticleText({
 
     let width = 0;
     let height = 0;
-    const resolvedColor = resolveCssColor(color, container, "#ffffff");
+
+    let resolvedColor = resolveCssColor(color, container, "#ffffff");
 
     const createParticles = () => {
-      // Тимчасовий canvas для визначення пікселів тексту
       const textCanvas = document.createElement("canvas");
-
       const textCtx = textCanvas.getContext("2d");
 
       if (!textCtx) return;
 
-      const currentFontSize = resolveCssPixels(fontSize, container, 16, 100);
+      const parentFontSize =
+        parseFloat(getComputedStyle(container).fontSize) || 100;
+
+      const currentFontSize = resolveCssPixels(
+        fontSize,
+        container,
+        parentFontSize,
+        parentFontSize,
+      );
+
       const currentParticleGap = resolveCssPixels(
         particleGap,
         container,
         currentFontSize,
         5,
       );
-      const currentParticleSize = resolveCssPixels(
+
+      const requestedParticleSize = resolveCssPixels(
         particleSize,
         container,
         currentFontSize,
         2,
       );
 
-      const safeParticleGap = Math.max(currentParticleGap, 0.1);
+      // Keep each square proportional to the rendered letter height.
+      const currentParticleSize = Math.min(
+        requestedParticleSize,
+        currentParticleGap * 0.8,
+      );
+
+      const safeParticleGap = Math.max(currentParticleGap, 0.5);
 
       textCtx.font = `${fontWeight} ${currentFontSize}px Arial, sans-serif`;
+
       textCtx.textAlign = "center";
       textCtx.textBaseline = "middle";
 
-      const textWidth = Math.ceil(textCtx.measureText(text).width);
-      width = textWidth + currentParticleSize;
-      height = Math.ceil(currentFontSize);
+      const metrics = textCtx.measureText(text);
 
-      textCanvas.width = width;
-      textCanvas.height = height;
-
-      textCtx.font = `${fontWeight} ${currentFontSize}px Arial, sans-serif`;
-      textCtx.textAlign = "center";
-      textCtx.textBaseline = "middle";
+      const textWidth = Math.ceil(metrics.width);
+      const textHeight = Math.ceil(currentFontSize);
 
       const dpr = Math.min(window.devicePixelRatio || 1, 2);
 
-      container.style.width = `${width}px`;
-      container.style.height = `${height}px`;
+      /*
+       * Розмір ParticleText = розмір тексту
+       */
+      width = textWidth;
+      height = textHeight;
+
       canvas.width = width * dpr;
       canvas.height = height * dpr;
       canvas.style.width = `${width}px`;
@@ -133,7 +164,15 @@ export default function ParticleText({
 
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
 
-      textCtx.fillStyle = "#ffffff";
+      textCanvas.width = width;
+      textCanvas.height = height;
+
+      textCtx.font = `${fontWeight} ${currentFontSize}px Arial, sans-serif`;
+
+      textCtx.textAlign = "center";
+      textCtx.textBaseline = "middle";
+
+      textCtx.fillStyle = "#fff";
 
       textCtx.fillText(text, width / 2, height / 2);
 
@@ -143,17 +182,25 @@ export default function ParticleText({
 
       for (let y = 0; y < height; y += safeParticleGap) {
         for (let x = 0; x < width; x += safeParticleGap) {
-          const index = (y * width + x) * 4;
+          const sampleX = Math.min(
+            Math.floor(x + safeParticleGap / 2),
+            width - 1,
+          );
+          const sampleY = Math.min(
+            Math.floor(y + safeParticleGap / 2),
+            height - 1,
+          );
+          const index = (sampleY * width + sampleX) * 4;
 
           const alpha = imageData.data[index + 3];
 
           if (alpha > 100) {
             particles.push({
-              x,
-              y,
+              x: x + (safeParticleGap - currentParticleSize) / 2,
+              y: y + (safeParticleGap - currentParticleSize) / 2,
 
-              originX: x,
-              originY: y,
+              originX: x + (safeParticleGap - currentParticleSize) / 2,
+              originY: y + (safeParticleGap - currentParticleSize) / 2,
 
               vx: 0,
               vy: 0,
@@ -167,45 +214,72 @@ export default function ParticleText({
       particlesRef.current = particles;
     };
 
-    const setup = () => {
-      createParticles();
-    };
-
     const handlePointerMove = (event) => {
       const rect = canvas.getBoundingClientRect();
 
       mouseRef.current.x = event.clientX - rect.left;
+
       mouseRef.current.y = event.clientY - rect.top;
+
       mouseRef.current.active = true;
     };
 
     const handlePointerLeave = () => {
       mouseRef.current.active = false;
+
+      for (const particle of particlesRef.current) {
+        particle.vx *= 0.35;
+        particle.vy *= 0.35;
+      }
     };
 
     canvas.addEventListener("pointermove", handlePointerMove);
 
     canvas.addEventListener("pointerleave", handlePointerLeave);
 
+    /*
+     * ResizeObserver
+     *
+     * Тепер ми НЕ змінюємо
+     * width / height контейнера.
+     */
+    const resizeObserver = new ResizeObserver(() => {
+      createParticles();
+    });
+
+    resizeObserver.observe(container.parentElement);
+
+    /*
+     * Початкова генерація
+     */
+    createParticles();
+
+    /*
+     * Animation loop
+     */
     const animate = () => {
       ctx.clearRect(0, 0, width, height);
 
       const particles = particlesRef.current;
+
       const mouse = mouseRef.current;
 
       for (const particle of particles) {
-        // -------------------------
-        // Взаємодія з курсором
-        // -------------------------
-
+        /*
+         * Взаємодія з курсором
+         */
         if (mouse.active) {
           const dx = particle.x - mouse.x;
+
           const dy = particle.y - mouse.y;
 
           const distance = Math.sqrt(dx * dx + dy * dy);
 
           if (distance < interactionRadius && distance > 0) {
-            const force = (interactionRadius - distance) / interactionRadius;
+            const force = Math.pow(
+              (interactionRadius - distance) / interactionRadius,
+              2,
+            );
 
             const directionX = dx / distance;
             const directionY = dy / distance;
@@ -216,36 +290,31 @@ export default function ParticleText({
           }
         }
 
-        // -------------------------
-        // Повернення до початкової
-        // позиції
-        // -------------------------
-
+        // Повернення до початкової позиції
         const homeDx = particle.originX - particle.x;
-
         const homeDy = particle.originY - particle.y;
 
-        particle.vx += homeDx * 0.015;
-        particle.vy += homeDy * 0.015;
+        particle.vx += homeDx * 0.035;
+        particle.vy += homeDy * 0.035;
 
-        // -------------------------
         // Тертя
-        // -------------------------
+        particle.vx *= 0.82;
+        particle.vy *= 0.82;
 
-        particle.vx *= 0.88;
-        particle.vy *= 0.88;
+        if (!mouse.active && Math.abs(homeDx) < 0.1 && Math.abs(homeDy) < 0.1) {
+          particle.x = particle.originX;
+          particle.y = particle.originY;
+          particle.vx = 0;
+          particle.vy = 0;
+        }
 
-        // -------------------------
         // Рух
-        // -------------------------
-
         particle.x += particle.vx;
         particle.y += particle.vy;
 
-        // -------------------------
-        // Малювання
-        // -------------------------
-
+        /*
+         * Малювання
+         */
         ctx.fillStyle = resolvedColor;
 
         ctx.fillRect(particle.x, particle.y, particle.size, particle.size);
@@ -254,13 +323,6 @@ export default function ParticleText({
       animationRef.current = requestAnimationFrame(animate);
     };
 
-    const resizeObserver = new ResizeObserver(() => {
-      setup();
-    });
-
-    resizeObserver.observe(container);
-
-    setup();
     animate();
 
     return () => {
@@ -288,7 +350,7 @@ export default function ParticleText({
   return (
     <div
       ref={containerRef}
-      className={`inline-block h-[1em] flex-none overflow-hidden ${className}`}
+      className={`relative inline-block flex-none ${className}`}
     >
       <canvas ref={canvasRef} className="block touch-none" />
     </div>

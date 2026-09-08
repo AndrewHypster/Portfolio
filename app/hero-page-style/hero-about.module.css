@@ -1,40 +1,28 @@
 .about {
+  width: 100%;
   margin-top: 10vh;
 }
 
 .titleBox {
   position: relative;
   width: 100%;
-  --about-title-font-size: clamp(48px, 12vw, 160px);
+
+  --about-title-font-size: clamp(0px, 17vw, 160px);
+
   font-size: var(--about-title-font-size);
+
   color: var(--foreground);
   gap: 0.2em;
+
   display: flex;
   justify-content: center;
   align-items: center;
-}
 
-.numberParticle,
-.textParticle {
-  height: 1em;
-  flex: 0 0 auto;
-}
-
-.numberParticle {
-  width: 1.5em;
-}
-
-.textParticle {
-  width: 7.2em;
+  min-height: 1.2em;
 }
 
 .title {
   display: none;
-}
-
-.title span {
-  font-weight: 100;
-  font-style: italic;
 }
 
 .titleIcon {
@@ -42,11 +30,8 @@
 }
 
 @media (max-width: 600px) {
-  .titleBox {
-    --about-title-font-size: clamp(18px, 8vw, 72px);
-    gap: 0.1em;
-    padding: 0 0.5rem;
-    box-sizing: border-box;
+  .titleIcon {
+    display: none;
   }
 }
 
