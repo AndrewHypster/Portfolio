@@ -79,7 +79,7 @@ export default function Home() {
               />
             </div>
             <div className={main.buttons}>
-              <Button className={main.button}>Зв'язатися</Button>
+              <Button className={main.button}>Зв&apos;язатися</Button>
               <Button className={main.button}>Проекти</Button>
             </div>
           </div>
@@ -194,26 +194,26 @@ export default function Home() {
         <div className={about.titleBox}>
           <Asterisk className={about.titleIcon} size=".8em" />
           <h2 className="hidden">01 ABOUT ME</h2>
-            <ParticleText
-              text="01"
-              fontSize="clamp(48px, 12vw, 160px)"
-              fontWeight={200}
-              color="currentColor"
-              interactionRadius={200}
-              interactionStrength={0.2}
-              particleSize="5%"
-              particleGap="5%"
-            />
-            <ParticleText
-              text="ABOUT ME"
-              fontSize="clamp(48px, 12vw, 160px)"
-              fontWeight={700}
-              color="currentColor"
-              interactionRadius={200}
-              interactionStrength={0.2}
-              particleSize="5%"
-              particleGap="5%"
-            />
+          <ParticleText
+            text="01"
+            fontSize="var(--about-title-font-size)"
+            fontWeight={200}
+            color="#ffffff"
+            interactionRadius={200}
+            interactionStrength={0.2}
+            particleSize="5%"
+            particleGap="5%"
+          />
+          <ParticleText
+            text="ABOUT ME"
+            fontSize="var(--about-title-font-size)"
+            fontWeight={700}
+            color="#ffffff"
+            interactionRadius={200}
+            interactionStrength={0.2}
+            particleSize="5%"
+            particleGap="5%"
+          />
           <Asterisk className={about.titleIcon} size=".8em" />
         </div>
       </section>

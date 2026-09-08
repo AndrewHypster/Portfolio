@@ -4,9 +4,11 @@
 
 .titleBox {
   position: relative;
-  font-size: clamp(48px, 12vw, 160px);
+  width: 100%;
+  --about-title-font-size: clamp(48px, 12vw, 160px);
+  font-size: var(--about-title-font-size);
   color: var(--foreground);
-  gap: 0.35em;
+  gap: 0.2em;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -37,6 +39,15 @@
 
 .titleIcon {
   animation: rotate 5s linear infinite;
+}
+
+@media (max-width: 600px) {
+  .titleBox {
+    --about-title-font-size: clamp(18px, 8vw, 72px);
+    gap: 0.1em;
+    padding: 0 0.5rem;
+    box-sizing: border-box;
+  }
 }
 
 @keyframes rotate {
